@@ -1,46 +1,58 @@
-### The Game Project 3 b – Canyons and coins
+### The Game Project 4 – Side scrolling ###
 
-Now we'll add some interactive elements to your game to give it an
-objective.
+1. Inspect the code [0 marks]
 
-1. Make a copy of your code from part 3 [0 marks]
+2. Add your game character to the sketch [0 marks]
+•	As previously, use the`gameChar_x` and `gameChar_y` variables to control the position of the character on the canvas.
+•	You only need to use your facing-forward character for this task.
+•	Check your character moves left and right when the corresponding keys are pressed.
 
-2. Collectable item object [2 marks]
-	- Copy and paste the collectable item code from part 2b.
-	- Add a property `isFound` to the object and initialise it to `false`
+3. Make an array of tree positions [2 marks]
+•	In `setup`, initialise the `trees_x` variable with an array of numbers.
+•	Each number should represent the x-position at which a tree will be drawn on the canvas.
+•	Have at least 3 elements in the array.
 
-3. Draw the collectable item [2 marks]
-	- Add your collectable item code from part 2b to the `draw` function.
-	- Adjust the properties of `collectable` to make the collectable item appear
-	in a sensible place
-	- Write a conditional statement so that the collectable item is only drawn when
-	`isFound` is `false`.
+4. Draw the trees [2 marks]
+•	In the `draw` function, create a for loop to traverse the `trees_x` array. HINT: you need to use `trees_x.length` to make sure you loop over every item in the array.
+•	Copy your tree drawing code from part 2b into the body of the for loop.
+•	Now modify your code so that each tree is drawn using the corresponding x position from `trees_x`. HINT: if your for loop uses a variable called `i`, you can get the x position by using `trees_x[i]`
+•	You should end up with lots of trees in different positions.
 
-4. Collectable item interaction [2 marks]
-	- Write an `if` statement in `draw` with a condition that is `true` when the
-		character is in range of the item. HINT: the [`dist function`]('https://p5js.org/reference/#/p5/dist') is useful here.
-	- When the condition is `true`, set the value of `isFound` in the `collectable`
-		to `true`.
-	- The result should be that when your character comes into contact with the collectable
-		item it disappears.
+5. Trees’ anchoring [1 mark]
+•	Make sure you have not altered all the anchor points (e.g. leave at least one trees_x[i] without adding or subtracting values from).
 
-5. Draw the canyon [1 marks]
-	- Add your canyon code from part 2b to the `draw` function.
-	- Adjust the properties of `canyon` to make the collectable item appear
-	in a sensible place
+6. Make an array of clouds [2 mark]
+•	In `setup`, initialise the `clouds` variable with an array containing some cloud objects (e.g. at least 3). HINT: you can copy these from part 2b but vary the x and y positions of each object.
 
-6. Falling down the canyon [2 marks]
-	- Write a conditional statement within `draw` to detect when the character
-	is over the canyon. HINT: use gameChar_x and the > and < operators
-	- When the condition is met set `isPlummeting` to `true`.
-	- Write another conditional statement within `draw` which detects when `isPlummeting`
-	is `true`
-	- When this condition is met increment `gameChar_y` so that the game character falls quickly
-	- Test that your character falls down the canyon when they pass over it
+7. Draw the clouds [2 marks]
+•	In the `draw` function, create a for loop to traverse the `clouds` array.
+•	Copy your cloud drawing code from part 2b into the body of the for loop.
+•	Now modify your code so that each cloud is drawn with the position and size determined by the corresponding object in the array.
 
-7. Jumping over the canyon [1 marks]
-	- We also want our game character to be able to jump over the canyon
-	- Adjust the conditional statement which detects whether the game character
-	is over the canyon so that it also requires the game character to be on the ground.
-	HINT: use `gameChar_y` and the `>=` operator
-	- Test that your character is able to jump over the canyon as well as fall down it
+8. Clouds’ anchoring [1 mark]
+•	Similar to 5, make sure you keep at least one position unchanged.
+
+9. And now for the mountains [2+2+1 marks]
+•	Repeat stages 6, 7 and 8 for the mountains.
+
+10. And now for the canyons [2+2+1 marks]
+•	Repeat stages 6, 7 and 8 for the canyons.
+
+11. And now for collectables [2+2+1 marks]
+•	Repeat stages 6, 7 and 8 for the collectables.
+
+12. Implement scrolling [3 marks]
+•	We need to make the background scenery scroll when the character moves towards the left and right edges of the canvas. We can achieve this by using p5’s [`translate`](https://p5js.org/reference/#/p5/translate) function in combination with [`push`](https://p5js.org/reference/#/p5/push) and [`pop`](https://p5js.org/reference/#/p5/pop).
+•	Make sure you've read about how these work before attempting the following steps.
+•	Make sure that the sections of code that draw the clouds, mountains, trees etc. are each placed correctly below the comments in the template.
+•	*Before* the insert the command `push()` followed by the command `translate(scrollPos, 0)`.
+•	*Before* the code to draw the game character and *after* the code to draw the trees, insert the command `pop()`.
+•	Now when the game character reaches the edge of the screen, all these background items will be moved in the opposite direction to the game character, creating the illusion of motion.
+•	Once you've got your head around what is going on, try adding more items in the 'off screen' space so that the game character has more game world to explore.
+•	Make sure that all the scenery moves together and that the character is not vanished from the screen.
+
+13. Submission format [1 mark]
+•	Make sure you use a zip file only to submit your work.
+
+14. Presentation [1 mark]
+•	Make sure you produce a visually readable code utilising some comments, consistent syntax and indentation.
