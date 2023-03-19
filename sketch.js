@@ -18,12 +18,27 @@ var isLeft;
 var isRight;
 var isFalling;
 var isPlummeting;
+var inCanyon = false;
+
+var canyon;
+var collectable;
 function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4 + 10;
 	gameChar_x = width/2;
 	gameChar_y = floorPos_y;
+	canyon = {
+		x_pos: 100,
+		y_pos: floorPos_y,
+		width: 120
+	}
+	collectable = {
+		x_pos: 100,
+		y_pos: 100,
+		size: 50,
+		isFound: false
+	}
 
 	isLeft = false;
 	isRight = false;
@@ -44,11 +59,12 @@ function draw()
 	rect(0, floorPos_y - 10, width, height - floorPos_y + 10); //draw some green ground
 
 	//draw the canyon
+	drawCanyon();
 
+	drawCollectable()
 
 	//the game character
-	if(isLeft && isFalling)
-	{
+	if(isLeft && isFalling) {
 		// add your jumping-left code
 		jumpingFacingLeft();
 	}
@@ -93,14 +109,22 @@ function draw()
 		gameChar_y -= 20;
 	}
 
-	if (gameChar_y == floorPos_y) {
+	// Fall down the canyon
+	var nearCanyonX = gameChar_x <= canyon.x_pos + canyon.width && gameChar_x >= canyon.x_pos;
+	var overCanynonY = gameChar_y < floorPos_y;
+	console.log('gameChar_y: ' + gameChar_y, 'floorPos_y: ' + floorPos_y)
+	var fallingIntoCanyon = nearCanyonX && !overCanynonY;
+	if (fallingIntoCanyon) {
+		console.log('falling')
+	}
+
+	if (gameChar_y == floorPos_y && !fallingIntoCanyon) {
 		isFalling = false;
 	}
 }
 
 
-function keyPressed()
-{
+function keyPressed() {
 	// if statements to control the animation of the character when
 	// keys are pressed.
 
@@ -120,8 +144,7 @@ function keyPressed()
 	}
 }
 
-function keyReleased()
-{
+function keyReleased() {
 	// if statements to control the animation of the character when
 	// keys are released.
 	switch (keyCode) {
@@ -208,4 +231,23 @@ function jumpingFacingLeft() {
 	ellipse(gameChar_x - 3, gameChar_y - 64, 15, 25) // head
 	fill(0)
 	rect(gameChar_x - 13, gameChar_y - 35, 10, 15) // left leg
+}
+
+function drawCanyon() {
+	fill(140, 140, 0);
+	rect(canyon.x_pos, 432, canyon.width, 200);
+}
+
+function drawCollectable() {
+	if (dist(gameChar_x, gameChar_y, collectable.x_pos, collectable.y_pos + 300) < 50) {
+		collectable.isFound = true;
+	}
+	if (!collectable.isFound) {
+		fill(255, 255, 0);
+		ellipse(collectable.x_pos, collectable.y_pos + 300, collectable.size, collectable.size);
+		fill(0);
+		ellipse(collectable.x_pos, collectable.y_pos + 300, collectable.size / 2, collectable.size / 2);
+		fill(255);
+		ellipse(collectable.x_pos, collectable.y_pos + 300, collectable.size / 4, collectable.size / 4);
+	}
 }
