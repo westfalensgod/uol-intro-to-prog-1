@@ -13,6 +13,7 @@ var gameChar_x;
 var gameChar_y;
 var floorPos_y;
 var scrollPos;
+var gameChar_world_x;
 
 
 var isLeft;
@@ -52,6 +53,8 @@ function setup() {
     {x: 120, y: 432},
     {x: 150, y: 432}
   ];
+  scrollPos = 0;
+  gameChar_world_x = gameChar_x;
 
   isLeft = false;
   isRight = false;

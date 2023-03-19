@@ -1,58 +1,84 @@
-### The Game Project 4 – Side scrolling ###
+### The Game Project 5 – Bring it all together
 
-1. Inspect the code [0 marks]
+Okay we have most of the aspects of our side-scrolling game covered so
+now it's time to bring all of these elements together. We're going to
+be doing a lot of cutting and pasting here, but do it carefully and test
+at the end of each stage.
 
-2. Add your game character to the sketch [0 marks]
-•	As previously, use the`gameChar_x` and `gameChar_y` variables to control the position of the character on the canvas.
-•	You only need to use your facing-forward character for this task.
-•	Check your character moves left and right when the corresponding keys are pressed.
+The code will be quite extensive now so we will refactor it into our
+functions to make it more manageable
 
-3. Make an array of tree positions [2 marks]
-•	In `setup`, initialise the `trees_x` variable with an array of numbers.
-•	Each number should represent the x-position at which a tree will be drawn on the canvas.
-•	Have at least 3 elements in the array.
+1. Inspect the code.
 
-4. Draw the trees [2 marks]
-•	In the `draw` function, create a for loop to traverse the `trees_x` array. HINT: you need to use `trees_x.length` to make sure you loop over every item in the array.
-•	Copy your tree drawing code from part 2b into the body of the for loop.
-•	Now modify your code so that each tree is drawn using the corresponding x position from `trees_x`. HINT: if your for loop uses a variable called `i`, you can get the x position by using `trees_x[i]`
-•	You should end up with lots of trees in different positions.
+2. Add game character controls [1 marks]
+	- Copy and paste the code which draws your game character from part 3_interaction into the
+	function `drawGameChar`
+	- Check that your game character appears in your sketch
+	- Copy and paste the code inside keyPressed and keyReleased functions from part 3_interaction
+	into the same functions here
+	- Test that your game character can move left and right and jump. NB. they won't fall back to
+	the ground just yet.
+	- Check that the animations look correct
 
-5. Trees’ anchoring [1 mark]
-•	Make sure you have not altered all the anchor points (e.g. leave at least one trees_x[i] without adding or subtracting values from).
+3. Add falling code [1 marks]
+	- From part 3b_canyonsAndCoins, copy and paste the conditional statement which makes the
+	character fall into the `draw` function.
+	- Test that the character now falls back to the ground when you jump.
 
-6. Make an array of clouds [2 mark]
-•	In `setup`, initialise the `clouds` variable with an array containing some cloud objects (e.g. at least 3). HINT: you can copy these from part 2b but vary the x and y positions of each object.
+4. Render background items [2 marks]
+	- From part 4_scrollingBackground, copy and paste the arrays `trees_x`, `clouds`, and `mountains`
+	- Copy and paste the `for loops` for each of these items into the `draw` function.
+	- Now we are going to refactor this code.
+	- Create three new functions `drawClouds`, `drawMountains`, `drawTrees`
+	- Cut and paste each `for loop` into the relevant function.
+	- In the `draw` function call each of the three new functions (eg. `drawClouds`)
+	- You should now see all of the above items drawn to the screen
 
-7. Draw the clouds [2 marks]
-•	In the `draw` function, create a for loop to traverse the `clouds` array.
-•	Copy your cloud drawing code from part 2b into the body of the for loop.
-•	Now modify your code so that each cloud is drawn with the position and size determined by the corresponding object in the array.
+5. Render canyons and collectables [2 marks]
+	- From 4_scrollingBackground, copy and paste the arrays `canyons`, `collectables`
+	- Copy and paste the `for loops` for each of these items into the `draw` function.
+	- We are also going to refactor this code but we will do things a little differently.
+	- Cut and paste only the body of each `for loop` into the functions `drawCanyon` and
+	`drawCollectable`
+	- Now replace the references to the arrays with the argument provided by the function
+	(eg. `canyons[i].posX` becomes `t_canyon.posX`)
+	- Finally we need to call these functions passing each canyon or collectable as a
+	parameter.
+	- Do this inside the body of each `for loop`. (eg. `drawCanyon(canyons[i]);`)
+	- You should now see canyons and collectables rendered. HINT: check the draw order is
+	correct
 
-8. Clouds’ anchoring [1 mark]
-•	Similar to 5, make sure you keep at least one position unchanged.
+6. Implement scrolling [1 marks]
+	- From 4_scrollingBackground copy and paste the `push`, `pop` and `translate`
+	commands into the correct places in the `draw` function
+	- Try walking to the edge of the screen and check that all the rendered items
+	move in the correct direction to create the illusion of motion.
 
-9. And now for the mountains [2+2+1 marks]
-•	Repeat stages 6, 7 and 8 for the mountains.
+7. Implement collectables interaction [2 marks]
+	- From part 3b_canyonsAndCoins, copy the conditional statement which checks
+	whether a player is within range of a collectable and paste it into the function
+	`checkCollectable`
+	- As you did with the `drawCollectable` function, replace the references to `collectable`
+	with references to `t_collectable`.
+	- Write the code to call `checkCollectables` just below the call to `drawCollectables`. It
+	should use exactly the same format.
+	- We now need to make sure that the collectable is not drawn once it has been found. Add
+	a conditional statement to the same `for loop` which prevents both functions being called
+	if that collectable's `isFound` property is `true`
+	- Test your code to check that collectables disappear when the game character collides with
+	them.
+	- You'll notice that once the screen starts scrolling the collectable items stop functioning
+	as expected. This is because `gameChar_x` only represents where the character appears
+	on the screen not where they are in the game world.
+	- The variable `gameChar_world_x` shows where the game character is in the game world. Replace
+	`gameChar_x` in the `checkCollectable` function with `gameChar_world_x` to make the collectable items work with scrolling.
 
-10. And now for the canyons [2+2+1 marks]
-•	Repeat stages 6, 7 and 8 for the canyons.
-
-11. And now for collectables [2+2+1 marks]
-•	Repeat stages 6, 7 and 8 for the collectables.
-
-12. Implement scrolling [3 marks]
-•	We need to make the background scenery scroll when the character moves towards the left and right edges of the canvas. We can achieve this by using p5’s [`translate`](https://p5js.org/reference/#/p5/translate) function in combination with [`push`](https://p5js.org/reference/#/p5/push) and [`pop`](https://p5js.org/reference/#/p5/pop).
-•	Make sure you've read about how these work before attempting the following steps.
-•	Make sure that the sections of code that draw the clouds, mountains, trees etc. are each placed correctly below the comments in the template.
-•	*Before* the insert the command `push()` followed by the command `translate(scrollPos, 0)`.
-•	*Before* the code to draw the game character and *after* the code to draw the trees, insert the command `pop()`.
-•	Now when the game character reaches the edge of the screen, all these background items will be moved in the opposite direction to the game character, creating the illusion of motion.
-•	Once you've got your head around what is going on, try adding more items in the 'off screen' space so that the game character has more game world to explore.
-•	Make sure that all the scenery moves together and that the character is not vanished from the screen.
-
-13. Submission format [1 mark]
-•	Make sure you use a zip file only to submit your work.
-
-14. Presentation [1 mark]
-•	Make sure you produce a visually readable code utilising some comments, consistent syntax and indentation.
+8. Implement canyons interaction [1 marks]
+	- From part 3b_canyonsAndCoins, copy and paste the conditional statement which makes the
+	character plummet into the `draw` function.
+	- Copy and paste the conditional statement which detects whether the player is over a canyon
+	into the function `checkCanyon`.
+	- Adapt the code to use the argument `t_canyon`
+	- Adapt the same code to use `gameChar_world_x` instead of `gameChar_x`
+	- Call the function from the same `for loop` which draws the canyons, passing the each canyon
+	as an argument in the same way as you did for `drawCanyon`
