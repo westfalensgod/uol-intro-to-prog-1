@@ -115,11 +115,12 @@ function draw()
 	console.log('gameChar_y: ' + gameChar_y, 'floorPos_y: ' + floorPos_y)
 	var fallingIntoCanyon = nearCanyonX && !overCanynonY;
 	if (fallingIntoCanyon) {
-		console.log('falling')
+		isFalling = true;
 	}
 
 	if (gameChar_y == floorPos_y && !fallingIntoCanyon) {
 		isFalling = false;
+		console.log('prevent falling')
 	}
 }
 
