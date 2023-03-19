@@ -21,9 +21,9 @@ var isPlummeting;
 function setup()
 {
 	createCanvas(1024, 576);
-	floorPos_y = height * 3/4;
+	floorPos_y = height * 3/4 + 10;
 	gameChar_x = width/2;
-	gameChar_y = floorPos_y + 10;
+	gameChar_y = floorPos_y;
 
 	isLeft = false;
 	isRight = false;
@@ -41,7 +41,7 @@ function draw()
 
 	noStroke();
 	fill(0,155,0);
-	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
+	rect(0, floorPos_y - 10, width, height - floorPos_y + 10); //draw some green ground
 
 	//draw the canyon
 
