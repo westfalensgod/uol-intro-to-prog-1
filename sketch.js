@@ -52,11 +52,11 @@ function setup() {
   ];
   collectables = [
     {x: 100, y: 100, size: 50, isFound: false},
-    {x: 3 * 100, y: 2 * 100, size: 50, isFound: false},
+    {x: 3 * 100, y: 0.5 * 100, size: 50, isFound: false},
     {x: 6 * 100, y: 1 * 100, size: 50, isFound: false},
-    {x: 8 * 100, y: 4 * 100, size: 50, isFound: false},
-    {x: 12 * 100, y: 6 * 100, size: 50, isFound: false},
-    {x: 15 * 100, y: 5 * 100, size: 50, isFound: false},
+    {x: 8 * 100, y: 0.3 * 100, size: 50, isFound: false},
+    {x: 12 * 100, y: 0.1 * 100, size: 50, isFound: false},
+    {x: 15 * 100, y: 0 * 100, size: 50, isFound: false},
   ]
   scrollPos = 0;
 
@@ -78,31 +78,20 @@ function draw() {
 
   push()
   translate(-scrollPos, 0);
+  noStroke()
   for (let i = 0; i < clouds.length; i++) {
     drawCloud(clouds[i]);
   }
-  pop()
-  push()
-  translate(-scrollPos, 0);
   for (let i = 0; i < mountains.length; i++) {
     drawMountain(mountains[i].x, mountains[i].y);
   }
-  pop()
-  push()
-  translate(-scrollPos / 2, 0);
   for (let i = 0; i < trees_x.length; i++) {
     drawTree(trees_x[i], floorPos_y - 200);
   }
-  pop()
-  push()
-  translate(-scrollPos, 0);
   for (let i = 0; i < collectables.length; i++) {
     drawCollectable(i);
   }
-  pop()
   noStroke();
-  push()
-  translate(-scrollPos / 2, 0);
   fill(0, 155, 0);
   rect(0, floorPos_y - 10, width * 10000, height - floorPos_y + 10); //draw some green ground
 
