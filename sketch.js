@@ -23,9 +23,11 @@ var clouds;
 var mountains;
 var collectables;
 var gameChar_world_x;
+var game_score;
+var flagpole;
+var lives = 3;
 
-function setup() {
-  createCanvas(1024, 576);
+function startGame() {
   floorPos_y = height * 3 / 4 + 10;
   gameChar_x = width / 2;
   gameChar_y = floorPos_y;
@@ -58,21 +60,40 @@ function setup() {
     {x: 12 * 100, y: 0.1 * 100, size: 50, isFound: false},
     {x: 15 * 100, y: 0 * 100, size: 50, isFound: false},
   ]
+  flagpole = {
+    x_pos: 15 * 100,
+    isReached: false
+  }
   scrollPos = 0;
 
   isLeft = false;
   isRight = false;
   isPlummeting = false;
   isFalling = false;
+
+  game_score = 0;
   gameChar_world_x = gameChar_x - scrollPos
+  lostLife = false;
+}
+
+function checkPlayerDie() {
+  if (gameChar_y > height) {
+    lives -= 1;
+    startGame();
+  }
+}
+
+function setup() {
+  createCanvas(1024, 576);
+  startGame();
 }
 
 function draw() {
 
   ///////////DRAWING CODE//////////
 
-  //scrolling
   scrollPos = gameChar_x - width / 2;
+
 
   background(100, 155, 255); //fill the sky blue
 
@@ -95,35 +116,38 @@ function draw() {
   fill(0, 155, 0);
   rect(0, floorPos_y - 10, width * 10000, height - floorPos_y + 10); //draw some green ground
 
-  //draw the canyon
   drawCanyon();
-
-  // drawCollectable()
-
+  drawFlagpole();
   //the game character
   if (isLeft && isFalling) {
-    // add your jumping-left code
     jumpingFacingLeft();
   } else if (isRight && isFalling) {
-    // add your jumping-right code
     jumpingFacingRight();
   } else if (isLeft) {
-    // add your walking left code
     walkingFacingLeft();
   } else if (isRight) {
-    // add your walking right code
     walkingFacingRight();
   } else if (isFalling || isPlummeting) {
-    // add your jumping facing forwards code
     jumpingFacingForwards();
   } else {
-    // add your standing front facing code
     frontFacing();
   }
   pop()
+
+  drawScore();
+  drawLives();
+
+  if (lives == 0) {
+    fill(255, 0, 0);
+    text('Game over press enter to restart', 100, 100);
+    fill(0, 0, 0);
+  }
+
+  if (flagpole.isReached) {
+    text('You win press enter to restart', 100, 100);
+    fill(255,0, 0);
+  }
   ///////////INTERACTION CODE//////////
-  //Put conditional statements to move the game character below here
-  // Logic to make the game character move or the background scroll.
   if(isLeft)
   {
     if(gameChar_x > width * 0.2)
@@ -173,6 +197,7 @@ function draw() {
   if (gameChar_y == floorPos_y && !fallingIntoCanyon) {
     isFalling = false;
   }
+  checkPlayerDie()
 
   gameChar_world_x = gameChar_x - scrollPos;
 }
@@ -191,10 +216,13 @@ function keyPressed() {
       isRight = true;
       break;
     case 32: //space
-      if (gameChar_y == floorPos_y) {
-        isPlummeting = true;
-      }
+      isPlummeting = true;
       break;
+    case 13: //enter
+    if (lives == 0 || flagpole.isReached) {
+      startGame();
+      lives = 3;
+    }
   }
 }
 
@@ -294,8 +322,9 @@ function drawCanyon() {
 
 function drawCollectable(i) {
   var { x, y, size, isFound } = collectables[i];
-  if (dist(gameChar_x, gameChar_y, x, y + 300) < 50) {
+  if (dist(gameChar_x, gameChar_y, x, y + 300) < 50 && !isFound) {
     collectables[i].isFound = true;
+    game_score += 1;
   }
   if (!isFound) {
     fill(255, 255, 0);
@@ -330,4 +359,37 @@ function drawMountain(x, y) {
   triangle(x, y, x + 100, y, x + 50, y - 100);
   triangle(x + 50, y - 100, x + 100, y, x + 200, y);
   triangle(x + 100, y, x + 200, y, x + 150, y - 100);
+}
+
+function drawLives() {
+  for (var i = 0; i < lives; i++) {
+    fill(255, 0, 0);
+    ellipse(20 + i * 30, 40, 20, 20);
+  }
+}
+
+function drawFlagpole() {
+  push();
+  stroke(255);
+  strokeWeight(5);
+  line(flagpole.x_pos, floorPos_y, flagpole.x_pos, floorPos_y - 250);
+  noStroke();
+  fill(255, 0, 0);
+
+  if (dist(gameChar_x, gameChar_y, flagpole.x_pos, floorPos_y) < 50) {
+    flagpole.isReached = true;
+  }
+
+  if (flagpole.isReached) {
+    rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
+  } else {
+    rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
+  }
+  pop();
+}
+
+function drawScore() {
+  fill(255);
+  textSize(20);
+  text("Score: " + game_score, 20, 20);
 }
